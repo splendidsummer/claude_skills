@@ -21,11 +21,18 @@ source .venv/bin/activate
 
 ### Install dependencies
 pip install -r requirements.txt
-3) Configure environment variables
+
+### Install demo_app in editable mode
+```bash
+pip install -e .
+```
+
+### Configure environment variables
 
 Copy .env.example to .env:
-
+```bash
 cp .env.example .env
+``` 
 
 Edit .env and set your GitHub token:
 
@@ -34,10 +41,14 @@ Create token: https://github.com/settings/tokens
 Required scopes: repo
 
 ### Run demo app
+```bash
 python -m demo_app.cli add 3 4
+```
 
 ### Run tests
+```
 pytest -q
+```
 
 ### Skills Usage
 
@@ -53,8 +64,13 @@ Available skills:
 - `/fix_bug` - Fix a bug with minimal, targeted changes and add a regression test
 - `/run_cli` - Run the project's CLI application
 
-You can also invoke skills with "Use skill":
-
-- `Use skill repo_audit to analyze this project.`
-- `Use skill write_tests to generate tests for github_utils.py`
-- Use MCP GitHub to create an issue called "Improve CLI error handling"
+## Contributing
+- Fork the repository and create a new branch for your feature or bugfix.
+- Make your changes and ensure all tests pass.
+- Open a pull request with a clear description of your changes and the problem it solves.
+- Follow the code style and best practices used in the project.
+- Add unit tests for any new features or bug fixes.
+- Update documentation if necessary.
+- Be responsive to feedback and make necessary changes to your pull request.
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
