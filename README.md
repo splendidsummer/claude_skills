@@ -39,26 +39,22 @@ python -m demo_app.cli add 3 4
 ### Run tests
 pytest -q
 
-<<<<<<< HEAD
-=======
-
 ### Skills Usage
 
-在 Claude Code 里你可以直接这样用
+List all available skills by typing `/skills` or `/repo_audit` in the conversation.
 
-比如你输入：
+Available skills:
+- `/run_tests` - Run the test suite and report results
+- `/code_review` - Review code changes for quality, bugs, and best practices
+- `/git_commit` - Create a git commit with proper changes
+- `/lint_code` - Run linting tools to check code quality
+- `/repo_audit` - Analyze repository structure and provide an overview
+- `/implement_feature` - Implement a new feature with proper structure and tests
+- `/fix_bug` - Fix a bug with minimal, targeted changes and add a regression test
+- `/run_cli` - Run the project's CLI application
 
-Use skill repo_audit to analyze this project.
+You can also invoke skills with "Use skill":
 
-或者：
-
-Use skill write_tests to generate tests for github_utils.py
-
-或者：
-
-Use MCP GitHub to create an issue called "Improve CLI error handling"
-
-
-
-
->>>>>>> be98f12 (chore: initial commit)
+- `Use skill repo_audit to analyze this project.`
+- `Use skill write_tests to generate tests for github_utils.py`
+- Use MCP GitHub to create an issue called "Improve CLI error handling"
