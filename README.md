@@ -39,3 +39,26 @@ python -m demo_app.cli add 3 4
 ### Run tests
 pytest -q
 
+<<<<<<< HEAD
+=======
+
+### Skills Usage
+
+在 Claude Code 里你可以直接这样用
+
+比如你输入：
+
+Use skill repo_audit to analyze this project.
+
+或者：
+
+Use skill write_tests to generate tests for github_utils.py
+
+或者：
+
+Use MCP GitHub to create an issue called "Improve CLI error handling"
+
+
+
+
+>>>>>>> be98f12 (chore: initial commit)
