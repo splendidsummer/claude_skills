@@ -9,7 +9,9 @@ def get_repo_info() -> dict:
     repo = os.getenv("GITHUB_REPO_NAME")
 
     if not token or not owner or not repo:
-        raise RuntimeError("Missing GITHUB_TOKEN / GITHUB_REPO_OWNER / GITHUB_REPO_NAME")
+        raise RuntimeError(
+            "Missing GITHUB_TOKEN / GITHUB_REPO_OWNER / GITHUB_REPO_NAME"
+        )
 
     url = f"https://api.github.com/repos/{owner}/{repo}"
     headers = {"Authorization": f"token {token}"}
