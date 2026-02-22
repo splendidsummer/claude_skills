@@ -20,11 +20,8 @@ source .venv/bin/activate
 
 
 ### Install dependencies
-pip install -r requirements.txt
-
-### Install demo_app in editable mode
 ```bash
-pip install -e .
+pip install -e ".[dev]"
 ```
 
 ### Configure environment variables
@@ -48,6 +45,24 @@ python -m demo_app.cli add 3 4
 ### Run tests
 ```
 pytest -q
+```
+
+## Code Quality Tools
+
+This project uses [ruff](https://docs.astral.sh/ruff/) for linting and [black](https://black.readthedocs.io/) for code formatting, integrated via [pre-commit](https://pre-commit.com/) hooks.
+
+### Install pre-commit hooks
+```bash
+make precommit-install
+```
+
+This will automatically run linting and formatting checks before each commit.
+
+### Manual commands
+```bash
+make lint          # 检查代码问题
+make format        # 自动修复并格式化代码
+make precommit-run # 对所有文件运行 pre-commit 检查
 ```
 
 ### Skills Usage

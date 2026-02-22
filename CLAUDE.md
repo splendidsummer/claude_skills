@@ -11,7 +11,7 @@ This is a Claude Code CLI + MCP starter template with a Python demo application.
 ```bash
 # Setup (already done)
 python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+pip install -e ".[dev]"
 
 # Run demo CLI
 python -m demo_app.cli add 3 4

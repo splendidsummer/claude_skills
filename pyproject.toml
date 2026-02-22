@@ -1,0 +1,21 @@
+[project]
+name = "demo-app"
+version = "0.1.0"
+description = "Claude Code CLI + MCP starter template with Python demo application"
+requires-python = ">=3.10"
+dependencies = [
+    "python-dotenv",
+    "requests",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pre-commit",
+]
+
+[tool.ruff]
+line-length = 88
+
+[tool.black]
+line-length = 88
