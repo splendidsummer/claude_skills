@@ -67,9 +67,9 @@ make precommit-run # 对所有文件运行 pre-commit 检查
 
 ### Skills Usage
 
-List all available skills by typing `/skills` or `/repo_audit` in the conversation.
+List all available skills by typing `/skills` in the conversation.
 
-Available skills:
+#### Core Development Skills
 - `/run_tests` - Run the test suite and report results
 - `/code_review` - Review code changes for quality, bugs, and best practices
 - `/git_commit` - Create a git commit with proper changes
@@ -78,6 +78,16 @@ Available skills:
 - `/implement_feature` - Implement a new feature with proper structure and tests
 - `/fix_bug` - Fix a bug with minimal, targeted changes and add a regression test
 - `/run_cli` - Run the project's CLI application
+
+#### Advanced Power Skills
+- `/refactor_code` - Refactor code for better design, readability, and maintainability
+- `/generate_docs` - Auto-generate documentation from code
+- `/security_audit` - Scan code for security vulnerabilities and suggest fixes
+- `/debug_error` - Debug runtime errors using stack traces and systematic analysis
+- `/generate_tests` - Auto-generate comprehensive test suites for existing code
+- `/explain_code` - Provide deep code explanation and architecture walkthrough
+- `/dependency_update` - Update and manage project dependencies safely
+- `/performance_profile` - Profile code and suggest performance optimizations
 
 ## Contributing
 - Fork the repository and create a new branch for your feature or bugfix.

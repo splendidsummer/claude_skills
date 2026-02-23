@@ -44,6 +44,12 @@ You can now use either:
 - **Skills** (type "Use skill"): `Use skill repo_audit`, `Use skill fix_bug`, etc.
 - **List all skills**: `/skills`
 
+### Core Skills
+`/repo_audit`, `/run_tests`, `/code_review`, `/git_commit`, `/lint_code`, `/implement_feature`, `/fix_bug`, `/run_cli`
+
+### Advanced Power Skills
+`/refactor_code`, `/generate_docs`, `/security_audit`, `/debug_error`, `/generate_tests`, `/explain_code`, `/dependency_update`, `/performance_profile`
+
 ## Environment Variables
 
 Required for github_utils.py:
