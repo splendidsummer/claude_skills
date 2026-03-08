@@ -13,6 +13,17 @@ license: Proprietary. LICENSE.txt has complete terms
 | Read/analyze content | `python -m markitdown presentation.pptx` |
 | Edit or create from template | Read [editing.md](editing.md) |
 | Create from scratch | Read [pptxgenjs.md](pptxgenjs.md) |
+| **Add slides** | `python scripts/add_slide.py template.pptx slide_id --after <ref>` |
+| **Delete slides** | Edit `ppt/presentation.xml`, remove from `<p:sldIdLst>` |
+| **Reorder slides** | Edit `ppt/presentation.xml`, reorder `<p:sldIdLst>` |
+| **Duplicate slides** | `python scripts/add_slide.py template.pptx slide_id` |
+| **Merge presentations** | Unpack both → copy slides → pack |
+| **Update text** | Edit `slide{N}.xml`, find `<a:t>` elements |
+| **Change colors** | Edit XML, Find hex colors in `fill`, `color` attributes |
+| **Add images** | Edit XML or use pptxgenjs |
+| **Create charts** | Use pptxgenjs for chart support |
+| **Create tables** | Edit XML or use pptxgenjs |
+| **Add shapes** | Edit XML: `<p:sp>` elements with `<a:xfrm>` positioning |
 
 ---
 
@@ -152,6 +163,16 @@ python -m markitdown output.pptx
 
 Check for missing content, typos, wrong order.
 
+**Check slide count:**
+```python
+from pptx import Presentation
+prs = Presentation("output.pptx")
+print(f"Slides: {len(prs.slides)}")
+for i, s in enumerate(prs.slides):
+    title = next((sh.text_frame.text[:30] for sh in s.shapes if sh.has_text_frame), "")
+    print(f"  [{i}] {title}")
+```
+
 **When using templates, check for leftover placeholder text:**
 
 ```bash
@@ -160,7 +181,26 @@ python -m markitdown output.pptx | grep -iE "xxxx|lorem|ipsum|this.*(page|slide)
 
 If grep returns results, fix them before declaring success.
 
-### Visual QA
+### Visual QA (PDF Method - Recommended)
+
+**最可靠的视觉验证方式**:
+
+```bash
+# 转换为 PDF
+libreoffice --headless --convert-to pdf output.pptx
+
+# 打开 PDF 查看
+xdg-open output.pdf
+
+# 验证清单:
+# ✓ 所有页面都显示
+# ✓ 文字没有被截断
+# ✓ 形状和颜色正确
+# ✓ 布局没有重叠
+# ✓ 图表/表格完整
+```
+
+### Visual QA (Image Method)
 
 **⚠️ USE SUBAGENTS** — even for 2-3 slides. You've been staring at the code and will see what you expect, not what's there. Subagents have fresh eyes.
 
@@ -219,6 +259,87 @@ To re-render specific slides after fixes:
 
 ```bash
 pdftoppm -jpeg -r 150 -f N -l N output.pdf slide-fixed
+```
+
+---
+
+## Interactive Editing Workflow
+
+### 推荐: PDF 预览方案 (最可靠)
+
+LibreOffice 无法自动刷新，使用 PDF 预览最可靠：
+
+```bash
+# 1. 初始生成 PDF 并打开
+libreoffice --headless --convert-to pdf presentation.pptx
+xdg-open presentation.pdf
+
+# 2. 编辑后更新 PDF
+libreoffice --headless --convert-to pdf presentation.pptx
+
+# 3. 在 PDF 阅读器中按 Ctrl+R 刷新
+```
+
+**快捷键**:
+| 操作 | 快捷键 |
+|------|--------|
+| 刷新 PDF | `Ctrl + R` |
+| 全屏 | `F11` |
+
+### python-pptx 快速编辑
+
+```python
+from pptx import Presentation
+
+prs = Presentation("presentation.pptx")
+
+# 修改标题
+slide = prs.slides[0]
+for shape in slide.shapes:
+    if shape.has_text_frame and "OldText" in shape.text_frame.text:
+        for para in shape.text_frame.paragraphs:
+            for run in para.runs:
+                run.text = run.text.replace("OldText", "NewText")
+
+# 添加幻灯片
+prs.slides.add_slide(prs.slide_layouts[0])
+
+# 删除幻灯片 (删除第 idx 页)
+idx = 5
+rId = prs.slides._sldIdLst[idx].rId
+prs.part.drop_rel(rId)
+del prs.slides._sldIdLst[idx]
+
+# 保存
+prs.save("presentation.pptx")
+```
+
+### 延迟对比
+
+| 方案 | 修改延迟 | 刷新方式 |
+|------|---------|---------|
+| pptxgenjs (重生成) | 3-5秒 | 手动重开 |
+| python-pptx + PDF | <1秒 | `Ctrl+R` |
+| XML 编辑 | <0.5秒 | `Ctrl+R` |
+
+---
+
+## Theme Integration
+
+**Use theme-factory skill** when creating styled presentations:
+
+1. First invoke `theme-factory` skill to select a theme
+2. Apply the chosen theme's colors and fonts to the presentation
+3. This ensures consistent, professional styling across all slides
+
+Example workflow:
+```
+User: "Create a product launch deck"
+1. Check if theme-factory applies → invoke it
+2. Show theme options or use specified theme
+3. Create pptx using theme colors/fonts
+4. Run QA
+5. Open with xdg-open
 ```
 
 ---

@@ -106,7 +106,168 @@ Slide order is in `ppt/presentation.xml` → `<p:sldIdLst>`.
 
 **Delete**: Remove `<p:sldId>`, then run `clean.py`.
 
-**Add**: Use `add_slide.py`. Never manually copy slide files—the script handles notes references, Content_Types.xml, and relationship IDs that manual copying misses.
+**Add**: Use `add_slide.py`. Never manually copy slide files—script handles notes references, Content_Types.xml, and relationship IDs that manual copying misses.
+
+**Duplicate slide**: Copy a slide with all its formatting intact:
+```bash
+python scripts/add_slide.py unpacked/ slide3.xml slide3_copy.xml
+```
+
+---
+
+## Content Operations
+
+### Adding Text
+Edit `<a:t>` elements in slide XML:
+```xml
+<a:t> Your new text here</a:t>
+```
+
+For rich text with formatting:
+```xml
+<a:r>
+  <a:rPr lang="en-US" sz="2800" b="1">
+    <a:t>Bold text</a:t>
+  </a:rPr>
+  <a:rPr lang="en-US">
+    <a:t>Normal text</a:t>
+  </a:rPr>
+</a:r>
+```
+
+### Adding Shapes
+Insert shapes using `<p:sp>` elements:
+
+| Shape | `prst` attribute |
+|-------|------------------|
+| Rectangle | `rect` |
+| Oval/Circle | `ellipse` |
+| Line | `line` |
+| Rounded Rectangle | `roundRect` |
+| Arrow | `rightArrow` |
+| Triangle | `triangle` |
+
+Example:
+```xml
+<p:sp>
+  <p:nvSpPr>
+    <a:xfrm>
+      <a:off x="100000" y="100000"/>
+      <a:ext cx="200000" cy="100000"/>
+    </a:xfrm>
+    <a:prstGeom>
+      <a:prst rect="w="200000" h="100000"/>
+    </a:prstGeom>
+    <a:solidFill>
+      <a:srgbClr val="0066FF"/>
+    </a:solidFill>
+  </a:spPr>
+</p:sp>
+```
+
+### Adding Images
+Add `<p:pic>` elements:
+```xml
+<p:pic>
+  <p:nvPicPr>
+    <a:cNvPr id="rId1"/>
+  </p:nvPicPr>
+</p:pic>
+```
+
+Image must to be added to `ppt/media/` folder and referenced in `[Content_Types].xml`.
+
+### Adding Tables
+Create `<a:tbl>` elements:
+```xml
+<a:tbl>
+  <a:tr>
+    <a:tc>
+      <a:p>
+        <a:r>
+          <a:t>Header 1</a:t>
+        </a:r>
+      </a:p>
+    </a:tc>
+    <a:tc>
+      <a:p>
+        <a:r>
+          <a:t>Header 2</a:t>
+        </a:r>
+      </a:p>
+    </a:tc>
+  </a:tr>
+  <!-- data rows -->
+</a:tbl>
+```
+
+### Adding Formulas
+
+PowerPoint uses **Office Math ML (OMML)** format for equations, embedded in `<m:oMath>` or `<m:oMathPara>` elements.
+
+**Formula structure:**
+```xml
+<m:oMathPara>
+  <m:oMath>
+    <m:r>
+      <m:t>E = mc</m:t>
+    </m:r>
+    <m:sSup>
+      <m:e><m:r><m:t>2</m:t></m:r></m:e>
+    </m:sSup>
+  </m:oMath>
+</m:oMathPara>
+```
+
+**Common math elements:**
+
+| Element | Purpose | Example |
+|---------|---------|---------|
+| `<m:r>` | Text run | `<m:r><m:t>x</m:t></m:r>` |
+| `<m:sSup>` | Superscript | x² |
+| `<m:sSub>` | Subscript | H₂O |
+| `<m:f>` | Fraction | `<m:num>1</m:num><m:den>2</m:den>` |
+| `<m:rad>` | Radical/sqrt | √x |
+| `<m:nary>` | N-ary (sum, integral) | Σ, ∫ |
+| `<m:acc>` | Accent (hat, bar) | x̄, x̂ |
+
+**Adding a simple equation:**
+```xml
+<m:oMathPara>
+  <m:oMath>
+    <m:r><m:t>a</m:t></m:r>
+    <m:sSup>
+      <m:e><m:r><m:t>2</m:t></m:r></m:e>
+    </m:sSup>
+    <m:r><m:t> + b</m:t></m:r>
+    <m:sSup>
+      <m:e><m:r><m:t>2</m:t></m:r></m:e>
+    </m:sSup>
+    <m:r><m:t> = c</m:t></m:r>
+    <m:sSup>
+      <m:e><m:r><m:t>2</m:t></m:r></m:e>
+    </m:sSup>
+  </m:oMath>
+</m:oMathPara>
+```
+
+**Tip**: For complex formulas, create them in PowerPoint's equation editor first, then unpack to see the OMML structure. Use pptxgenjs for programmatic formula generation if needed.
+
+### Adding Charts
+Charts are complex embedded objects. For new charts, prefer pptxgenjs. For editing existing charts:
+, locate the `<c:chart>` or `<c:plotArea>` element and Chart XML structure:
+
+```xml
+<c:chart>
+  <c:plotArea>
+    <c:barChart>...</c:barChart>
+    <c:lineChart>...</c:lineChart>
+    <c:pieChart>...</c:pieChart>
+  </c:plotArea>
+</c:chart>
+```
+
+**Tip**: For complex visualizations, consider extracting data and creating new charts with pptxgenjs rather than modifying chart XML directly.
 
 ---
 
