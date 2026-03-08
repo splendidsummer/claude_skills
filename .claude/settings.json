@@ -4,5 +4,9 @@
       "mcp__filesystem__list_directory",
       "WebSearch"
     ]
+  },
+  "enabledPlugins": {
+    "superpowers@claude-plugins-official": true
   }
+
 }
